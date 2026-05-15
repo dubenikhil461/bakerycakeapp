@@ -11,16 +11,10 @@
         to="/#catalog"
         class="tw:hidden tw:md:inline tw:text-white/75 tw:no-underline tw:text-sm tw:tracking-widest tw:uppercase tw:font-semibold tw:transition-colors tw:hover:text-gold"
       >
-        Menu
+        Catalog
       </NuxtLink>
       <NuxtLink
-        to="/#auth"
-        class="tw:hidden tw:md:inline tw:text-white/75 tw:no-underline tw:text-sm tw:tracking-widest tw:uppercase tw:font-semibold tw:transition-colors tw:hover:text-gold"
-      >
-        Order
-      </NuxtLink>
-      <NuxtLink
-        to="/#auth"
+        to="/auth"
         class="tw:inline-flex tw:bg-gradient-to-br tw:from-gold tw:to-[#e0940a] tw:text-deep tw:px-6 tw:py-2 tw:rounded-full tw:font-bold tw:text-xs tw:tracking-widest tw:uppercase tw:no-underline tw:transition-all tw:hover:-translate-y-0.5 tw:shadow-[0_4px_16px_rgba(240,180,41,0.35)] tw:hover:shadow-[0_8px_24px_rgba(240,180,41,0.5)]"
       >
         Sign In

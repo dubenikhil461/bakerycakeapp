@@ -34,18 +34,12 @@
       </p>
 
       <div class="tw:relative tw:flex tw:gap-5 tw:flex-wrap tw:justify-center tw:animate-fade-down tw:[animation-delay:0.3s]">
-        <a
-          href="#catalog"
+        <NuxtLink to="/catalog"
           class="tw:inline-flex tw:bg-gradient-to-br tw:from-gold tw:to-[#c97c00] tw:text-deep tw:px-10 tw:py-3.5 tw:rounded-full tw:font-bold tw:text-sm tw:tracking-widest tw:uppercase tw:no-underline tw:transition-all tw:hover:-translate-y-1 tw:shadow-[0_6px_24px_rgba(240,180,41,0.4)] tw:hover:shadow-[0_12px_32px_rgba(240,180,41,0.55)]"
         >
-          Explore Menu
-        </a>
-        <a
-          href="#auth"
-          class="tw:inline-flex tw:bg-transparent tw:text-gold-light tw:px-10 tw:py-3.5 tw:rounded-full tw:font-semibold tw:text-sm tw:tracking-widest tw:uppercase tw:no-underline tw:border tw:border-gold/40 tw:transition-all tw:hover:border-gold tw:hover:bg-gold/8"
-        >
-          Order Now
-        </a>
+          Explore Catalog 
+          <!-- todo nav to dashboard -->
+        </NuxtLink>
       </div>
 
       <div class="tw:absolute tw:bottom-10 tw:left-1/2 tw:flex tw:flex-col tw:items-center tw:gap-1.5 tw:text-white/30 tw:text-xs tw:tracking-widest tw:uppercase tw:animate-bounce-scroll">

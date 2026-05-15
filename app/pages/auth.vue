@@ -28,11 +28,11 @@
       </div>
       <div class="tw:p-10">
         <ClientOnly>
-          <HomeLoginForm
+          <FormsLoginForm
             v-if="activeTab === 'login'"
             @switch-tab="activeTab = $event"
           />
-          <HomeSignupForm
+          <FormsSignupForm
             v-else
             @switch-tab="activeTab = $event"
           />
