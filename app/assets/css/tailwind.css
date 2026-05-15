@@ -1,0 +1,91 @@
+@import 'tailwindcss' prefix(tw);
+
+html {
+  scroll-behavior: smooth;
+}
+
+@theme {
+  --color-deep: #080f24;
+  --color-navy: #0d1b3e;
+  --color-gold: #f0b429;
+  --color-gold-light: #ffd97d;
+  --color-gold-pale: #fff3cc;
+  --color-cream: #fdf6e3;
+  --color-blush: #ff9db5;
+
+  --font-playfair: 'Playfair Display', serif;
+  --font-cormorant: 'Cormorant Garamond', serif;
+  --font-raleway: 'Raleway', sans-serif;
+
+  --animate-twinkle: twinkle 4s ease-in-out infinite alternate;
+  --animate-float-around: floatAround 8s ease-in-out infinite;
+  --animate-fade-down: fadeDown 0.9s ease both;
+  --animate-fade-up: fadeUp 0.7s ease forwards;
+  --animate-bounce-scroll: bounceScroll 2s ease-in-out infinite;
+}
+
+@keyframes twinkle {
+  from { opacity: 0.4; }
+  to { opacity: 1; }
+}
+
+@keyframes floatAround {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  33% { transform: translateY(-18px) rotate(5deg); }
+  66% { transform: translateY(10px) rotate(-4deg); }
+}
+
+@keyframes fadeDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes bounceScroll {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(8px); }
+}
+
+.home-stars {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at 20% 10%, rgba(240, 180, 41, 0.08) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 90%, rgba(255, 157, 181, 0.07) 0%, transparent 60%);
+}
+
+.home-stars::before,
+.home-stars::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(1px 1px at 10% 15%, rgba(255, 255, 255, 0.6) 0%, transparent 100%),
+    radial-gradient(1px 1px at 30% 40%, rgba(255, 255, 255, 0.4) 0%, transparent 100%),
+    radial-gradient(1px 1px at 55% 20%, rgba(255, 255, 255, 0.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at 70% 60%, rgba(255, 255, 255, 0.3) 0%, transparent 100%),
+    radial-gradient(1px 1px at 85% 30%, rgba(255, 255, 255, 0.6) 0%, transparent 100%),
+    radial-gradient(1px 1px at 95% 75%, rgba(255, 255, 255, 0.4) 0%, transparent 100%),
+    radial-gradient(1px 1px at 45% 80%, rgba(255, 255, 255, 0.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at 15% 65%, rgba(255, 255, 255, 0.3) 0%, transparent 100%),
+    radial-gradient(1px 1px at 60% 45%, rgba(255, 255, 255, 0.4) 0%, transparent 100%),
+    radial-gradient(1px 1px at 25% 90%, rgba(255, 255, 255, 0.5) 0%, transparent 100%);
+  animation: twinkle 4s ease-in-out infinite alternate;
+}
+
+.home-stars::after {
+  background-image:
+    radial-gradient(1px 1px at 18% 35%, rgba(240, 180, 41, 0.7) 0%, transparent 100%),
+    radial-gradient(1px 1px at 42% 10%, rgba(240, 180, 41, 0.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at 78% 45%, rgba(240, 180, 41, 0.6) 0%, transparent 100%),
+    radial-gradient(1px 1px at 90% 20%, rgba(255, 255, 255, 0.7) 0%, transparent 100%),
+    radial-gradient(1px 1px at 5% 50%, rgba(255, 255, 255, 0.4) 0%, transparent 100%),
+    radial-gradient(1px 1px at 65% 85%, rgba(240, 180, 41, 0.5) 0%, transparent 100%);
+  animation-delay: 2s;
+}

@@ -1,0 +1,4 @@
+<template>
+  <HomeLanding />
+  <HomeAuthSection />
+</template>
