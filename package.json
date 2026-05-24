@@ -10,8 +10,6 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
-    "@formkit/nuxt": "^2.0.0",
-    "@formkit/vue": "^2.0.0",
     "better-auth": "^1.6.11",
     "nuxt": "^4.4.5",
     "vue": "^3.5.34",
