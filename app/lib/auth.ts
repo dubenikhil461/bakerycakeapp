@@ -1,20 +1,26 @@
 import { createAuthClient } from 'better-auth/vue'
-import { emailOTPClient } from "better-auth/client/plugins"
+import { emailOTPClient } from 'better-auth/client/plugins'
 
+let _authClient: ReturnType<typeof createAuthClient> | null = null
 
-export const authClient = createAuthClient({
-    baseURL: useRuntimeConfig().public.apiBase as string || 'http://localhost:7021',
-    plugins: [
-        emailOTPClient() 
-    ]
-})
+function getAuthClient() {
+  if (!_authClient) {
+    const config = useRuntimeConfig()
+    _authClient = createAuthClient({
+      baseURL: (config.public.apiBase as string) || 'http://localhost:7021',
+      plugins: [emailOTPClient()],
+    })
+  }
+  return _authClient
+}
 
 export const useAuth = () => {
-    return {
-        client: authClient,
-        emailOtp: authClient.emailOtp,
-        signIn: authClient.signIn,
-        signUp: authClient.signUp,
-        useSession: authClient.useSession,
-    }
+  const authClient = getAuthClient()
+  return {
+    client: authClient,
+    emailOtp: authClient.emailOtp,
+    signIn: authClient.signIn,
+    signUp: authClient.signUp,
+    useSession: authClient.useSession,
+  }
 }

@@ -3,115 +3,189 @@
     <div class="tw:text-center tw:mb-8">
       <div class="tw:text-4xl tw:mb-2">🎂</div>
       <h2 class="tw:font-playfair tw:text-2xl tw:text-white">
-        Welcome Back!
+        {{ step === 'email' ? 'Welcome!' : 'Check Your Email' }}
       </h2>
       <p class="tw:text-sm tw:text-white/45 tw:mt-1">
-        Sign in to place your sweet order
+        {{ step === 'email'
+          ? 'Enter your email to receive a one-time code'
+          : `We sent a 6-digit code to ${email}` }}
       </p>
     </div>
 
+    <!-- Step 1: Email -->
     <form
+      v-if="step === 'email'"
       class="tw:space-y-5"
-      @submit.prevent="onSubmit"
+      @submit.prevent="sendOtp"
     >
       <div class="tw:block">
         <label class="tw:block tw:text-xs tw:tracking-widest tw:uppercase tw:text-gold-light tw:font-semibold tw:mb-2">
-          Phone / Email
+          Email Address
         </label>
         <input
-          v-model="identifier"
-          type="text"
-          placeholder="Enter your phone or email"
-          class="tw:w-full tw:bg-white/6 tw:border tw:border-gold/20 tw:rounded-lg tw:px-4 tw:py-3.5 tw:text-white tw:font-raleway tw:text-sm tw:outline-none tw:transition-all tw:focus:border-gold/55 tw:focus:shadow-[0_0_0_3px_rgba(240,180,41,0.1)] tw:placeholder:text-white/25"
-        >
-      </div>
-      <div class="tw:block">
-        <label class="tw:block tw:text-xs tw:tracking-widest tw:uppercase tw:text-gold-light tw:font-semibold tw:mb-2">
-          Password
-        </label>
-        <input
-          v-model="password"
-          type="password"
-          placeholder="Your password"
+          v-model="email"
+          type="email"
+          placeholder="you@example.com"
+          autocomplete="email"
           class="tw:w-full tw:bg-white/6 tw:border tw:border-gold/20 tw:rounded-lg tw:px-4 tw:py-3.5 tw:text-white tw:font-raleway tw:text-sm tw:outline-none tw:transition-all tw:focus:border-gold/55 tw:focus:shadow-[0_0_0_3px_rgba(240,180,41,0.1)] tw:placeholder:text-white/25"
         >
       </div>
       <button
         type="submit"
-        class="tw:w-full tw:bg-gradient-to-br tw:from-gold tw:to-[#c97c00] tw:text-deep tw:py-4 tw:rounded-xl tw:font-extrabold tw:text-sm tw:tracking-widest tw:uppercase tw:border-0 tw:cursor-pointer tw:transition-all tw:hover:-translate-y-0.5 tw:shadow-[0_6px_20px_rgba(240,180,41,0.35)] tw:hover:shadow-[0_12px_30px_rgba(240,180,41,0.5)] tw:mt-2"
-        :disabled="loading"
+        :disabled="loading || !email"
+        class="tw:w-full tw:bg-gradient-to-br tw:from-gold tw:to-[#c97c00] tw:text-deep tw:py-4 tw:rounded-xl tw:font-extrabold tw:text-sm tw:tracking-widest tw:uppercase tw:border-0 tw:cursor-pointer tw:transition-all tw:hover:-translate-y-0.5 tw:shadow-[0_6px_20px_rgba(240,180,41,0.35)] tw:hover:shadow-[0_12px_30px_rgba(240,180,41,0.5)] tw:mt-2 tw:disabled:opacity-50 tw:disabled:cursor-not-allowed tw:disabled:hover:translate-y-0"
       >
-        {{ loading ? 'Signing in…' : 'Sign In' }}
+        {{ loading ? 'Sending…' : '📲 Send OTP' }}
       </button>
     </form>
 
-    <div class="tw:flex tw:items-center tw:gap-4 tw:my-6 tw:text-xs tw:tracking-wide tw:uppercase tw:text-white/25">
-      <span class="tw:flex-1 tw:h-px tw:bg-white/10" />
-      or continue with
-      <span class="tw:flex-1 tw:h-px tw:bg-white/10" />
-    </div>
-
-    <button
-      type="button"
-      class="tw:w-full tw:bg-transparent tw:text-gold-light tw:py-3 tw:rounded-full tw:font-semibold tw:text-sm tw:tracking-widest tw:uppercase tw:border tw:border-gold/40 tw:cursor-pointer tw:transition-all tw:hover:border-gold tw:hover:bg-gold/8"
-      @click="showToast('📱 OTP login coming soon!')"
+    <!-- Step 2: OTP -->
+    <form
+      v-else
+      class="tw:space-y-5"
+      @submit.prevent="verifyOtp"
     >
-      📲 Login with OTP
-    </button>
-
-    <p class="tw:text-center tw:mt-6 tw:text-sm tw:text-white/35">
-      Don't have an account?
+      <div class="tw:block">
+        <label class="tw:block tw:text-xs tw:tracking-widest tw:uppercase tw:text-gold-light tw:font-semibold tw:mb-2">
+          One-Time Code
+        </label>
+        <input
+          ref="otpInput"
+          v-model="otp"
+          type="text"
+          inputmode="numeric"
+          pattern="[0-9]*"
+          maxlength="6"
+          placeholder="••••••"
+          autocomplete="one-time-code"
+          class="tw:w-full tw:bg-white/6 tw:border tw:border-gold/20 tw:rounded-lg tw:px-4 tw:py-3.5 tw:text-white tw:font-raleway tw:text-lg tw:tracking-[0.4em] tw:text-center tw:outline-none tw:transition-all tw:focus:border-gold/55 tw:focus:shadow-[0_0_0_3px_rgba(240,180,41,0.1)] tw:placeholder:text-white/25 tw:placeholder:tracking-normal"
+        >
+      </div>
       <button
-        type="button"
-        class="tw:text-gold-light tw:bg-transparent tw:border-0 tw:cursor-pointer tw:underline-offset-2 tw:hover:underline"
-        @click="emit('switch-tab', 'signup')"
+        type="submit"
+        :disabled="loading || otp.length < 6"
+        class="tw:w-full tw:bg-gradient-to-br tw:from-gold tw:to-[#c97c00] tw:text-deep tw:py-4 tw:rounded-xl tw:font-extrabold tw:text-sm tw:tracking-widest tw:uppercase tw:border-0 tw:cursor-pointer tw:transition-all tw:hover:-translate-y-0.5 tw:shadow-[0_6px_20px_rgba(240,180,41,0.35)] tw:hover:shadow-[0_12px_30px_rgba(240,180,41,0.5)] tw:mt-2 tw:disabled:opacity-50 tw:disabled:cursor-not-allowed tw:disabled:hover:translate-y-0"
       >
-        Create one
+        {{ loading ? 'Verifying…' : '✅ Verify & Sign In' }}
       </button>
-    </p>
+
+      <div class="tw:flex tw:items-center tw:justify-between tw:pt-1">
+        <button
+          type="button"
+          class="tw:text-white/40 tw:bg-transparent tw:border-0 tw:cursor-pointer tw:text-sm tw:hover:text-white/70 tw:transition-colors"
+          @click="goBack"
+        >
+          ← Change email
+        </button>
+        <button
+          type="button"
+          :disabled="resendCooldown > 0"
+          class="tw:text-gold-light tw:bg-transparent tw:border-0 tw:cursor-pointer tw:text-sm tw:hover:text-gold tw:transition-colors tw:disabled:opacity-40 tw:disabled:cursor-not-allowed"
+          @click="sendOtp"
+        >
+          {{ resendCooldown > 0 ? `Resend in ${resendCooldown}s` : 'Resend code' }}
+        </button>
+      </div>
+    </form>
   </div>
 </template>
 
 <script setup lang="ts">
-import { useAuth  } from '@/lib/auth'
+import { useAuth } from '@/lib/auth'
 
-const { signIn } = useAuth()
-
-const emit = defineEmits<{
-  'switch-tab': [tab: 'signup']
-}>()
-
+const { emailOtp, signIn } = useAuth()
 const { showToast } = useHomeToast()
 
-const identifier = ref('')
-const password = ref('')
-const loading = ref(false)
+type Step = 'email' | 'otp'
 
-async function onSubmit() {
-  if (!identifier.value || !password.value) {
-    showToast('Please enter your email and password')
-    return
-  }
+const step = ref<Step>('email')
+const email = ref('')
+const otp = ref('')
+const loading = ref(false)
+const resendCooldown = ref(0)
+const otpInput = ref<HTMLInputElement | null>(null)
+
+let cooldownTimer: ReturnType<typeof setInterval> | null = null
+
+async function sendOtp() {
+  if (!email.value) return
 
   loading.value = true
   try {
-    const { error } = await signIn.email({
-      email: identifier.value,
-      password: password.value,
+    const { error } = await emailOtp.sendVerificationOtp({
+      email: email.value,
+      type: 'sign-in',
     })
 
     if (error) {
-      showToast(error.message ?? 'Sign in failed')
+      showToast(error.message ?? 'Failed to send OTP')
       return
     }
 
-    showToast('🎉 Welcome back! Redirecting...')
+    step.value = 'otp'
+    otp.value = ''
+    startResendCooldown()
+    showToast('📬 OTP sent! Check your inbox.')
+
+    await nextTick()
+    otpInput.value?.focus()
   }
   catch {
-    showToast('🎉 Welcome back! Redirecting...')
+    showToast('Failed to send OTP. Please try again.')
   }
   finally {
     loading.value = false
   }
 }
+
+async function verifyOtp() {
+  if (otp.value.length < 6) return
+
+  loading.value = true
+  try {
+    const { error } = await signIn.emailOtp({
+      email: email.value,
+      otp: otp.value,
+    })
+
+    if (error) {
+      showToast(error.message ?? 'Invalid or expired code')
+      otp.value = ''
+      return
+    }
+
+    showToast('🎉 Welcome! Redirecting...')
+  }
+  catch {
+    showToast('🎉 Welcome! Redirecting...')
+  }
+  finally {
+    loading.value = false
+  }
+}
+
+function goBack() {
+  step.value = 'email'
+  otp.value = ''
+  clearCooldown()
+}
+
+function startResendCooldown(seconds = 60) {
+  clearCooldown()
+  resendCooldown.value = seconds
+  cooldownTimer = setInterval(() => {
+    resendCooldown.value -= 1
+    if (resendCooldown.value <= 0) clearCooldown()
+  }, 1000)
+}
+
+function clearCooldown() {
+  if (cooldownTimer) {
+    clearInterval(cooldownTimer)
+    cooldownTimer = null
+  }
+  resendCooldown.value = 0
+}
+
+onUnmounted(clearCooldown)
 </script>
