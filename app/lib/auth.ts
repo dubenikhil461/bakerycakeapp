@@ -1,26 +1,28 @@
 import { createAuthClient } from 'better-auth/vue'
 import { emailOTPClient } from 'better-auth/client/plugins'
 
-let _authClient: ReturnType<typeof createAuthClient> | null = null
+type AuthClient = ReturnType<typeof createAuthClient>
 
-function getAuthClient() {
-  if (!_authClient) {
-    const config = useRuntimeConfig()
-    _authClient = createAuthClient({
-      baseURL: (config.public.apiBase as string) || 'http://localhost:7021',
-      plugins: [emailOTPClient()],
-    })
-  }
-  return _authClient
+let _authClient: AuthClient | null = null
+
+/** Called once by the auth Nuxt plugin — never call this directly in components. */
+export function initAuthClient(baseURL: string) {
+  if (_authClient) return
+  _authClient = createAuthClient({
+    baseURL,
+    plugins: [emailOTPClient()],
+  })
 }
 
 export const useAuth = () => {
-  const authClient = getAuthClient()
+  if (!_authClient) {
+    throw new Error('[auth] Client not initialised — is plugins/auth.ts loaded?')
+  }
   return {
-    client: authClient,
-    emailOtp: authClient.emailOtp,
-    signIn: authClient.signIn,
-    signUp: authClient.signUp,
-    useSession: authClient.useSession,
+    client: _authClient,
+    emailOtp: _authClient.emailOtp,
+    signIn: _authClient.signIn,
+    signUp: _authClient.signUp,
+    useSession: _authClient.useSession,
   }
 }
