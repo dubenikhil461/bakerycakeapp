@@ -2,10 +2,14 @@
 definePageMeta({ ssr: false, middleware: 'auth' })
 useHead({ title: 'My Wishlist – Shivragi' })
 
-const { wishlistItems, fetchWishlist } = useWishlist()
+const { wishlistItems, fetchWishlist, toggleWishlist } = useWishlist()
 
-// wishlistItems comes from the composable; ensure fresh data
-await fetchWishlist()
+// Always re-fetch on every visit so deleted/deactivated cakes are never shown
+onMounted(fetchWishlist)
+
+async function handleRemove(cakeId: string) {
+  await toggleWishlist(cakeId)
+}
 </script>
 
 <template>
@@ -25,11 +29,24 @@ await fetchWishlist()
     />
 
     <div v-else class="tw:grid tw:grid-cols-1 tw:sm:grid-cols-2 tw:xl:grid-cols-3 tw:gap-5">
-      <AppCakeCard
+      <div
         v-for="item in wishlistItems"
-        :key="item.cakeId"
-        :cake="item.cake"
-      />
+        :key="item.cake.id"
+        class="tw:relative tw:group/wish"
+      >
+        <AppCakeCard :cake="item.cake" />
+
+        <!-- Remove button — visible on hover -->
+        <button
+          class="tw:absolute tw:bottom-18 tw:left-1/2 tw:-translate-x-1/2 tw:z-10
+                 tw:opacity-0 tw:group-hover/wish:opacity-100 tw:transition-opacity
+                 tw:text-xs tw:bg-red-500/80 tw:hover:bg-red-500 tw:text-white
+                 tw:px-3 tw:py-1 tw:rounded-full tw:whitespace-nowrap"
+          @click.prevent="handleRemove(item.cake.id)"
+        >
+          ✕ Remove
+        </button>
+      </div>
     </div>
   </div>
 </template>

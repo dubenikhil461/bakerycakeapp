@@ -29,16 +29,6 @@ onMounted(() => {
   obs.observe(el)
 })
 
-async function handleAddToCart(e: Event) {
-  e.preventDefault()
-  e.stopPropagation()
-  try {
-    await addToCart({ cakeId: props.cake.id, variantId: null, quantity: 1 })
-    showToast(`🎂 ${props.cake.name} added to cart!`)
-  } catch {
-    showToast('Could not add to cart. Please try again.')
-  }
-}
 
 async function handleWishlist(e: Event) {
   e.preventDefault()
@@ -89,17 +79,6 @@ const rating = computed(() => parseFloat(props.cake.avgRating))
       <div class="tw:flex tw:items-center tw:gap-1.5 tw:mt-auto">
         <AppRatingStars :value="rating" size="sm" />
         <span class="tw:text-xs tw:text-white/35">({{ cake.reviewCount }})</span>
-      </div>
-
-      <div class="tw:flex tw:items-center tw:justify-between tw:gap-2">
-        <span class="tw:font-cormorant tw:text-xl tw:font-semibold tw:text-gold">₹{{ parseFloat(cake.basePrice).toFixed(0) }}</span>
-        <button
-          class="tw:text-xs tw:bg-gold/15 tw:border tw:border-gold/30 tw:text-gold tw:px-3 tw:py-1.5 tw:rounded-full tw:hover:bg-gold/25 tw:transition-all tw:font-semibold"
-          :disabled="cartLoading"
-          @click="handleAddToCart"
-        >
-          Add →
-        </button>
       </div>
     </div>
   </NuxtLink>

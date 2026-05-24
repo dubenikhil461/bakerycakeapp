@@ -15,10 +15,13 @@ export function useWishlist() {
       const res = await $fetch<{ success: true; data: WishlistItem[] }>('/api/wishlist', {
         credentials: 'include',
       })
+      // API already filters out deleted/inactive cakes — sync state to match exactly
       wishlistItems.value = res.data
-      wishlistIds.value = res.data.map(w => w.cakeId)
+      wishlistIds.value = res.data.map(w => w.cake.id)
     } catch {
-      // Not logged in
+      // Not logged in — clear any stale state
+      wishlistItems.value = []
+      wishlistIds.value = []
     }
   }
 
@@ -49,6 +52,8 @@ export function useWishlist() {
         })
         wishlistItems.value = [...wishlistItems.value, res.data]
       }
+      // Re-sync from server to remove any stale deleted/inactive cake IDs
+      await fetchWishlist()
     } catch {
       // Revert optimistic update
       if (alreadyIn) {
