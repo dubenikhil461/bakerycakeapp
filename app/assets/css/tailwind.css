@@ -50,6 +50,38 @@ html {
   50% { transform: translateX(-50%) translateY(8px); }
 }
 
+/* ── FormKit validation styles ─────────────────────────────────────────────── */
+
+/* Red border + glow when a field is invalid and the error is visible           */
+.formkit-outer[data-invalid] .formkit-input {
+  border-color: rgba(239, 68, 68, 0.6) !important;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.12) !important;
+}
+.formkit-outer[data-invalid] .formkit-input:focus {
+  border-color: rgba(239, 68, 68, 0.85) !important;
+}
+
+/* Select uses a darker solid background so the native dropdown looks correct  */
+select.formkit-input {
+  background-color: #0f1623;
+}
+
+/* Textarea should not be resizable (consistent with the rest of the UI)       */
+textarea.formkit-input {
+  resize: none;
+}
+
+/* ▲ pointer above each validation message so it visually points to the input  */
+.formkit-message::before {
+  content: '▲';
+  font-size: 7px;
+  line-height: 1;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+
+/* ── End FormKit ──────────────────────────────────────────────────────────── */
+
 .home-stars {
   position: fixed;
   inset: 0;

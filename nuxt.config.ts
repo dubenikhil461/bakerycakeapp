@@ -34,11 +34,25 @@ export default defineNuxtConfig({
           href: 'https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:wght@300;400;600&family=Raleway:wght@300;400;600;700&display=swap',
         },
       ],
+      script: [
+        { src: 'https://checkout.razorpay.com/v1/checkout.js', defer: true },
+      ],
     },
   },
 
   routeRules: {
     '/': { ssr: false },
+    '/cakes': { ssr: false },
+    '/cakes/**': { ssr: false },
+    '/cart': { ssr: false },
+    '/checkout': { ssr: false },
+    '/orders': { ssr: false },
+    '/orders/**': { ssr: false },
+    '/account': { ssr: false },
+    '/addresses': { ssr: false },
+    '/wishlist': { ssr: false },
+    '/admin': { ssr: false },
+    '/admin/**': { ssr: false },
   },
 
   $development: {
@@ -52,5 +66,5 @@ export default defineNuxtConfig({
     },
   },
 
-  // modules: ['@pinia/nuxt'],
+  modules: ['@formkit/nuxt'],
 })
